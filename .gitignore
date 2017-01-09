@@ -15,4 +15,7 @@ makefile
 generated*.png
 *.pyc
 /skydrop/utils/.ipynb_checkpoints/
-
+/skydrop/skydrop_configurator/
+*.json
+*.EE
+*.FW
