@@ -4,6 +4,8 @@
 #include "../../fc/fc.h"
 #include "buzzer.h"
 #include "audio.h"
+#include "sequencer.h"
+#include "../led.h"
 
 
 #define AUDIO_LOW_PASS		10.0
@@ -12,6 +14,7 @@
 #define VARIO_BEEP	1
 #define VARIO_PAUSE	2
 #define VARIO_CONT	3
+#define VARIO_BIBIP 4
 
 volatile uint8_t audio_vario_mode = VARIO_OFF;
 volatile uint16_t audio_vario_pause;
@@ -57,6 +60,8 @@ ISR(AUDIO_TIMER_OVF)
 	if (audio_vario_mode == VARIO_BEEP)
 	//pause start
 	{
+	    led_set(32000, 0, 0);
+	
 		//silent
 		buzzer_set_vol(0);
 
@@ -77,6 +82,7 @@ ISR(AUDIO_TIMER_OVF)
 		buzzer_set_vol(config.gui.vario_volume);
 		buzzer_set_freq(audio_vario_freq);
 
+	    led_set(0, 0, 32000);
 		if (audio_vario_length > 0)
 		{
 			audio_timer.SetTop(audio_vario_length);
@@ -86,6 +92,10 @@ ISR(AUDIO_TIMER_OVF)
 			audio_off();
 
 		return;
+	}
+	
+	if (audio_vario_mode == VARIO_BIBIP){
+	   led_set(0, 32000, 0);
 	}
 }
 
