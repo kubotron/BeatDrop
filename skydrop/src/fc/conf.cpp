@@ -28,13 +28,13 @@ EEMEM cfg_t config_ee = {
 		//menu_audio_flags
 		CFG_AUDIO_MENU_SPLASH | CFG_AUDIO_MENU_PAGES | CFG_AUDIO_MENU_BUTTONS | CFG_AUDIO_MENU_GPS,
 		//menu_volume
-		40,
+		30,
 		//vario_volume
-		100,
+		30,
 		//vario_mute
 		false,
 		//alert_volume
-		100,
+		30,
 		//number_of_pages
 		MAX_NUMBER_OF_PAGES,
 		//silent
