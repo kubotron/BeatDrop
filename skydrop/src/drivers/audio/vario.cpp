@@ -16,7 +16,7 @@
 #define VARIO_CONT	3
 #define VARIO_BIBIP 4
 
-volatile uint8_t audio_vario_mode = VARIO_OFF;
+volatile uint8_t audio_vario_mode = VARIO_BIBIP;
 volatile uint16_t audio_vario_pause;
 volatile uint16_t audio_vario_length;
 volatile float audio_vario_freq = 0;
@@ -165,6 +165,10 @@ void audio_vario_apply()
 
 			buzzer_set_freq(audio_vario_freq);
 		break;
+		
+		case(VARIO_BIBIP):
+            seq_start(&vario_seq, config.gui.vario_volume);
+        break;
 	}
 }
 
@@ -239,6 +243,7 @@ void audio_vario_reset()
 	//so lowpass will not affect affect new beeps
 	audio_vario_freq = 0;
 	//next vario sound will go from OFF state
-	audio_vario_mode = VARIO_OFF;
+// 	audio_vario_mode = VARIO_OFF;
+    audio_vario_mode = VARIO_BIBIP;
 
 }
