@@ -26,6 +26,7 @@ bool vario_force_change = false;
 
 extern Timer audio_timer;
 
+MK_SEQ(vario_seq, ARR({750, 0, 750, 0}), ARR({250, 150, 250, 150}));
 
 //linear aproximation between two points
 uint16_t get_near(float vario, volatile uint16_t * src)

@@ -19,3 +19,5 @@ generated*.png
 *.json
 *.EE
 *.FW
+/skydrop/utils/build/build_number.txt
+/skydrop/src/build_number.h
