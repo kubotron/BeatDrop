@@ -190,7 +190,7 @@ EEMEM cfg_t config_ee = {
 		//usb_mode
 		USB_MODE_NONE,
 		//use_gps
-		true,
+		false,
 		//gps_format_flags
 		GPS_DDdddddd | GPS_SPD_KPH,
 		//use_bt
