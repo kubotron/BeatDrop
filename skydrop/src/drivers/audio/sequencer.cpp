@@ -11,6 +11,8 @@
 #include "../../fc/fc.h"
 #include "buzzer.h"
 #include "audio.h"
+#include "bibip.h"
+
 
 //sequencer
 volatile bool seq_enabled = false;
@@ -21,6 +23,9 @@ volatile uint8_t seq_index;
 volatile uint8_t seq_len;
 volatile uint16_t seq_duration;
 volatile uint8_t seq_volume;
+
+volatile uint16_t tone1;
+volatile uint16_t tone2;
 
 #define AUDIO_SILENT_AFTER_SEQ	250
 
@@ -43,6 +48,12 @@ void seq_next_tone()
 	{
 		//load tone and length from pgm
 		tone = pgm_read_word(&seq_tone_ptr[seq_index]);
+		if (seq_index == 0){
+		    tone1 = tone;
+		}
+		if (seq_index == 2){
+            tone2 = tone;
+        }
 		seq_duration = pgm_read_word(&seq_length_ptr[seq_index]);
 	}
 	else

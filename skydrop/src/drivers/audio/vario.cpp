@@ -26,12 +26,8 @@ int16_t vario_ivario_old = 0;
 bool vario_force_change = false;
 
 extern Timer audio_timer;
-MK_SEQ(vario_seq1, ARR({1200, 0, 1200}), ARR({250, 150, 250}));
-MK_SEQ(vario_seq2, ARR({200, 0, 200}), ARR({500, 50, 500}));
 static const sequence_t * bibips[2] = {&vario_seq1,&vario_seq2};
-const sequence_t * seq_ptr1 = &vario_seq1;
-
-
+const sequence_t * active_seq;
 
 //linear aproximation between two points
 uint16_t get_near(float vario, volatile uint16_t * src)
@@ -172,10 +168,12 @@ void audio_vario_apply()
 		
 		case(VARIO_BIBIP):
 			if (vario_ivario_old > 0){
-         	   seq_start(bibips[0], config.gui.vario_volume);
+			   active_seq = bibips[0];
 			} else {
-         	   seq_start(bibips[1], config.gui.vario_volume);
+               active_seq = bibips[1];
         	}
+        	  
+        	seq_start(active_seq, config.gui.vario_volume);
          break;
 	}
 }
