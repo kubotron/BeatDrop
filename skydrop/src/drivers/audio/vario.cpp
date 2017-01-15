@@ -6,6 +6,7 @@
 #include "audio.h"
 #include "sequencer.h"
 #include "../led.h"
+#include "bibip.h"
 
 
 #define AUDIO_LOW_PASS		10.0
@@ -25,8 +26,12 @@ int16_t vario_ivario_old = 0;
 bool vario_force_change = false;
 
 extern Timer audio_timer;
+MK_SEQ(vario_seq1, ARR({1200, 0, 1200}), ARR({250, 150, 250}));
+MK_SEQ(vario_seq2, ARR({200, 0, 200}), ARR({500, 50, 500}));
+static const sequence_t * bibips[2] = {&vario_seq1,&vario_seq2};
+const sequence_t * seq_ptr1 = &vario_seq1;
 
-MK_SEQ(vario_seq, ARR({750, 0, 750, 0}), ARR({250, 150, 250, 150}));
+
 
 //linear aproximation between two points
 uint16_t get_near(float vario, volatile uint16_t * src)
@@ -96,7 +101,6 @@ ISR(AUDIO_TIMER_OVF)
 	}
 	
 	if (audio_vario_mode == VARIO_BIBIP){
-	   led_set(0, 32000, 0);
 	}
 }
 
@@ -167,8 +171,12 @@ void audio_vario_apply()
 		break;
 		
 		case(VARIO_BIBIP):
-            seq_start(&vario_seq, config.gui.vario_volume);
-        break;
+			if (vario_ivario_old > 0){
+         	   seq_start(bibips[0], config.gui.vario_volume);
+			} else {
+         	   seq_start(bibips[1], config.gui.vario_volume);
+        	}
+         break;
 	}
 }
 

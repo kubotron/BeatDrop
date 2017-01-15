@@ -142,7 +142,7 @@ EEMEM cfg_t config_ee = {
 		//lift
 		10,
 		//sink
-		-150,
+		-10,
 		//fluid
 		1,
 	},
