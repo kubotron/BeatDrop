@@ -167,13 +167,13 @@ void audio_vario_apply()
 		break;
 		
 		case(VARIO_BIBIP):
-			if (vario_ivario_old > 0){
-			   active_seq = bibips[0];
-			} else {
-               active_seq = bibips[1];
-        	}
+// 			if (vario_ivario_old > 0){
+// 			   active_seq = bibips[0];
+// 			} else {
+//                active_seq = bibips[1];
+//         	}
         	  
-        	seq_start(active_seq, config.gui.vario_volume);
+        	seq_start_env(&env_seq);
          break;
 	}
 }

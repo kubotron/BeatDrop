@@ -2,6 +2,8 @@
 #ifndef BIBIP_H_
 #define BIBIP_H_
 
+#define BIBIP_ENVELOPE_MODE
+
 #define BIBIP_LENGTH_MS 200 
 #define BIBIP_PAUSE_MS  50 
 
@@ -20,10 +22,17 @@
 #define BIBIP_FREQ_11 990
 #define BIBIP_FREQ_12 1114
 
+#define BIBIP_ATTACK 40
+#define BIBIP_SUSTAIN 10
+
 #define BIBIP_SEQ ARR({BIBIP_LENGTH_MS, BIBIP_PAUSE_MS, BIBIP_LENGTH_MS})
+
+#define BIBIP_ENV ARR({BIBIP_ATTACK, 0, BIBIP_SUSTAIN})
 
 MK_SEQ(vario_seq1, ARR({BIBIP_FREQ_0, 0, BIBIP_FREQ_1}), BIBIP_SEQ);
 MK_SEQ(vario_seq2, ARR({BIBIP_FREQ_10, 0, BIBIP_FREQ_9}), BIBIP_SEQ);
+MK_SEQ_ENV(env_seq, ARR({BIBIP_FREQ_10, 0, BIBIP_FREQ_9}), BIBIP_SEQ, BIBIP_ENV);
+
 
 extern const sequence_t * active_seq;
 
