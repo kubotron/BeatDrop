@@ -21,3 +21,5 @@ generated*.png
 *.FW
 /skydrop/utils/build/build_number.txt
 /skydrop/src/build_number.h
+skydrop/utils/ttf2bin/debug/igc_check.py
+skydrop/utils/ttf2bin/debug/test.py
