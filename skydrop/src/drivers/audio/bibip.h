@@ -29,9 +29,51 @@
 
 #define BIBIP_ENV ARR({BIBIP_ATTACK, 0, BIBIP_SUSTAIN})
 
+#define ENVELOPE_TEST ARR({10,30,40,30,40,50,60,70,80,70,60,50,50,40,40,30,30,20,20,10})
+
 MK_SEQ(vario_seq1, ARR({BIBIP_FREQ_0, 0, BIBIP_FREQ_1}), BIBIP_SEQ);
 MK_SEQ(vario_seq2, ARR({BIBIP_FREQ_10, 0, BIBIP_FREQ_9}), BIBIP_SEQ);
-MK_SEQ_ENV(env_seq, ARR({BIBIP_FREQ_10, 0, BIBIP_FREQ_9}), BIBIP_SEQ, BIBIP_ENV);
+
+MK_SEQ_ENV(env_seq, ARR({440,
+440,
+440,
+440,
+440,
+440,
+440,
+440,
+440,
+440,
+440,
+440,
+440,
+440,
+440,
+440,
+440,
+440,
+440,
+440}), 
+ARR({10,
+10,
+10,
+10,
+10,
+10,
+10,
+10,
+10,
+10,
+10,
+10,
+10,
+10,
+10,
+10,
+10,
+10,
+10,
+10}), ENVELOPE_TEST);
 
 
 extern const sequence_t * active_seq;
