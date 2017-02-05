@@ -29,4 +29,6 @@ void seq_loop();
 
 extern volatile bool seq_enabled;
 
+void seq_bibip(uint16_t freq1, uint16_t freq2, uint16_t length);
+
 #endif /* SEQUENCER_H_ */

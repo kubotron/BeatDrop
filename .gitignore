@@ -15,4 +15,5 @@ makefile
 generated*.png
 *.pyc
 /skydrop/utils/.ipynb_checkpoints/
-
+/skydrop_configurator/app/fw/*
+/skydrop_configurator/app/UPDATE.EE

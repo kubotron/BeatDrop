@@ -96,6 +96,9 @@ void gui_value_loop()
 			fprintf(lcd_out, "l=%4u", audio_vario_length / 31);
 			disp.GotoXY(GUI_DIALOG_LEFT + 1, GUI_DIALOG_TOP + 6 + f_h * 2);
 			fprintf(lcd_out, "p=%4u", audio_vario_pause / 31);
+			disp.GotoXY(GUI_DIALOG_LEFT + 1, GUI_DIALOG_TOP + 8 + f_h * 3);
+            fprintf(lcd_out, "BIBIP mode");
+
 		break;
 
 
