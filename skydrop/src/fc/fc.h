@@ -69,6 +69,7 @@ struct flight_stats_t
 
 #define FC_GPS_NEW_SAMPLE_LOGGER		0b00000001
 #define FC_GPS_NEW_SAMPLE_WIND			0b00000010
+#define FC_GPS_NEW_SAMPLE_AGL			0b00000100
 
 struct gps_data_t
 {
@@ -103,14 +104,23 @@ struct gps_data_t
 
 struct accel_data_t
 {
-	vector_i16_t raw;			//raw data from sensor
-	vector_float_t vector;		//acceleration vector in g, max +-16g for each axis
-	float total;				//total acceleration, absolute value of vector
-	float total_gui_filtered; 	//total acceleration, + filtered, + peak detection, used by acceleration widget
+	vector_float_t sens;
+	vector_float_t bias;
+
+	vector_i16_t raw;				//raw data from sensor
+	vector_float_t vector;			//acceleration vector in g, max +-16g for each axis
+	float total;					//total acceleration, absolute value of vector
+
+	float filter_old;
+	uint8_t filter_hold_time;
+	float total_filtered;			//total acceleration, + filtered, + peak detection, used by acceleration widget
 };
 
 struct mag_data_t
 {
+	vector_float_t bias;
+	vector_float_t sens;
+
 	vector_i16_t raw;			//raw data from sensor
 	vector_float_t vector;		//magnetic vector, not in scale
 };
@@ -163,6 +173,15 @@ struct flight_data_t
 	float autostart_altitude;
 };
 
+struct agl_data_t
+{
+	bool valid;
+	bool file_valid;
+
+	char filename[10];
+	int16_t ground_level;
+};
+
 #define FC_GLIDE_MIN_KNOTS	(1.07) //2km/h
 #define FC_GLIDE_MIN_SINK	(-0.01)
 
@@ -174,14 +193,15 @@ struct flight_computer_data_t
 
 	gps_data_t gps_data;
 
-	wind_data_t wind; 		// wind calculation data
+	wind_data_t wind; 		//wind calculation data
 
-	temp_data_t temp;		// temperature and humidity data
+	temp_data_t temp;		//temperature and humidity data
 
 	vario_data_t vario;		//vario, pressure, history data
 
 	flight_data_t flight;	//flight related stats, measurements, data
 
+	agl_data_t agl;
 
 	uint8_t logger_state;
 

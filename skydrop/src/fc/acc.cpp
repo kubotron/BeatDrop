@@ -2,9 +2,30 @@
 #include "fc.h"
 #include "../common.h"
 
-acc_data_t acc_data;
+#define LPF_beta 		0.05		//low pass filter setting
+#define max_hold_time	50	//0.5s	//hold time of last peak value ( 1 = 10ms )
 
-void accel_save_calibration(vector_float_t sens_vf, vector_float_t bias_vf)
+void acc_widget_filter()
+{
+	float new_accel = fc.acc.total;
+	if(new_accel >= fc.acc.filter_old)
+	{
+		fc.acc.filter_old = new_accel;
+		fc.acc.filter_hold_time = 0;
+	}
+	else if((new_accel < fc.acc.filter_old) and (fc.acc.filter_hold_time < max_hold_time ) )
+	{
+		fc.acc.filter_hold_time += 1;
+	}
+	else
+	{
+		fc.acc.filter_old = (fc.acc.filter_old - (LPF_beta * (fc.acc.filter_old - new_accel)));
+	}
+	fc.acc.total_filtered = fc.acc.filter_old;
+}
+
+
+void acc_save_calibration(vector_float_t sens_vf, vector_float_t bias_vf)
 {
 	vector_i16_t bias;
 	vector_i16_t sens;
@@ -24,7 +45,7 @@ void accel_save_calibration(vector_float_t sens_vf, vector_float_t bias_vf)
 	//DEBUG("written int: bias %d %d %d sens %d %d %d\n", bias.x, bias.y, bias.z, sens.x, sens.y, sens.z);
 }
 
-void accel_load_calibration(vector_float_t * sens_vf, vector_float_t * bias_vf)
+void acc_load_calibration(volatile vector_float_t * sens_vf, volatile vector_float_t * bias_vf)
 {
 	vector_i16_t bias;
 	vector_i16_t sens;
@@ -44,21 +65,21 @@ void accel_load_calibration(vector_float_t * sens_vf, vector_float_t * bias_vf)
 	//DEBUG("loaded int: bias %d %d %d sens %d %d %d\n", bias.x, bias.y, bias.z, sens.x, sens.y, sens.z);
 }
 
-void accel_calc_init()
+void acc_calc_init()
 {
-	acc_data.total_acc = 1.0;
-	acc_data.hold_time = 0;
-	accel_load_calibration( &acc_data.calibration.sens, &acc_data.calibration.bias );
+	fc.acc.total = 1.0;
+	fc.acc.filter_hold_time = 0;
+	acc_load_calibration(&fc.acc.sens, &fc.acc.bias);
 }
 
-void accel_calc_vector() //calculate real acceleration using calibration values
+void acc_calc_vector() //calculate real acceleration using calibration values
 {
-	fc.acc.vector.x = (float(fc.acc.raw.x) - acc_data.calibration.bias.x) / acc_data.calibration.sens.x;
-	fc.acc.vector.y = (float(fc.acc.raw.y) - acc_data.calibration.bias.y) / acc_data.calibration.sens.y;
-	fc.acc.vector.z = (float(fc.acc.raw.z) - acc_data.calibration.bias.z) / acc_data.calibration.sens.z;
+	fc.acc.vector.x = (float(fc.acc.raw.x) - fc.acc.bias.x) / fc.acc.sens.x;
+	fc.acc.vector.y = (float(fc.acc.raw.y) - fc.acc.bias.y) / fc.acc.sens.y;
+	fc.acc.vector.z = (float(fc.acc.raw.z) - fc.acc.bias.z) / fc.acc.sens.z;
 }
 
-void accel_calc_total()	//calculate total acceleration
+void acc_calc_total()	//calculate total acceleration
 {
-	fc.acc.total = ( sqrt(fc.acc.vector.x * fc.acc.vector.x + fc.acc.vector.y * fc.acc.vector.y + fc.acc.vector.z * fc.acc.vector.z) );
+	fc.acc.total = sqrt(fc.acc.vector.x * fc.acc.vector.x + fc.acc.vector.y * fc.acc.vector.y + fc.acc.vector.z * fc.acc.vector.z);
 }
