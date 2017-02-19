@@ -3,5 +3,5 @@ cd Release
 ../utils/build/pre_build.sh
 make
 ../utils/build/post_build.sh
-cp SKYDROP.FW /Volumes/NO\ NAME/
-diskutil unmount /Volumes/NO\ NAME/
+cp SKYDROP.FW /Volumes/BIBEEP/
+diskutil unmount /Volumes/BIBEEP/
