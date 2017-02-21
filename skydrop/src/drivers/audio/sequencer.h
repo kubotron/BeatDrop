@@ -24,11 +24,13 @@ struct sequence_t
 	const uint16_t name ## _length[] PROGMEM = length; \
 	const sequence_t name PROGMEM = {name ## _tone, name ## _length, sizeof(name ## _tone) / 2}; \
 
+void seq_bibip(uint16_t freq1, uint16_t freq2, uint16_t length);
+void seq_beeb_beep(uint16_t freq1, uint16_t freq2, uint16_t length);
 void seq_start(const sequence_t * seq, uint8_t volume);
 void seq_loop();
 
 extern volatile bool seq_enabled;
 
-void seq_bibip(uint16_t freq1, uint16_t freq2, uint16_t length);
+
 
 #endif /* SEQUENCER_H_ */

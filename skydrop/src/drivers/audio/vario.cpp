@@ -19,6 +19,11 @@ volatile uint16_t audio_vario_pause;
 volatile uint16_t audio_vario_length;
 volatile float audio_vario_freq = 0;
 
+volatile int16_t bibip_freq1;
+volatile int16_t bibip_freq2;
+
+extern Timer audio_timer;
+
 int16_t vario_ivario_old = 0;
 bool vario_force_change = false;
 
@@ -65,97 +70,9 @@ uint16_t black_keys[41] = {
 4978,
 4978};
 
-uint16_t black_keys_shift[41] = {
-29  ,
-34  ,
-39  ,
-46  ,
-52  ,
-58  ,
-69  ,
-78  ,
-92  ,
-104 ,
-116 ,
-139 ,
-155 ,
-185 ,
-207 ,
-233 ,
-277 ,
-311 ,
-370 ,
-415 ,
-466 ,
-554 ,
-622 ,
-740 ,
-831 ,
-932 ,
-1109,
-1244,
-1479,
-1661,
-1865,
-2217,
-2489,
-2960,
-3322,
-3729,
-4435,
-4978,
-4978,
-4978,
-4978};
-
 uint16_t bibip_pauses[41] = {
-250,
-300,
-350,
-400,
-450,
-500,
-550,
-600,
-650,
-700,
-750,
-800,
-850,
-900,
-950,
-1000,
-1050,
-1100,
-1150,
-1200,
-1200,
-1200,
-1150,
-1100,
-1050,
-1000,
-950,
-900,
-850,
-800,
-750,
-700,
-650,
-600,
-550,
-500,
-450,
-400,
-350,
-300,
-250
+100,200,300,400,500,600,700,800,900,1000,1100,1200,1300,1400,1500,1600,1700,1800,1900,2000,2100,2000,1900,1800,1700,1600,1500,1400,1300,1200,1100,1000,900,800,700,600,500,400,300,200,100
 };
-
-int16_t bibip_freq1;
-int16_t bibip_freq2;
-
-extern Timer audio_timer;
 
 
 //linear aproximation between two points
@@ -231,11 +148,17 @@ ISR(AUDIO_TIMER_OVF)
 void audio_vario_apply()
 {
 	switch (audio_vario_mode)
-	{
+	{   
 	    case(VARIO_BIBIP): 
-	        //todo
-	        seq_bibip(bibip_freq1,bibip_freq2,audio_vario_pause);
-	        break;
+	       if (bibip_freq2 > bibip_freq1)//lift
+           {
+                seq_beeb_beep(bibip_freq1,bibip_freq2,audio_vario_pause);        
+           }
+           else
+           {
+                seq_bibip(bibip_freq1,bibip_freq2,audio_vario_pause);
+           }
+	    break;
 		case(VARIO_OFF):
 			//start the beeps
 			if (audio_vario_length > 0 && audio_vario_pause > 0)
@@ -316,23 +239,25 @@ void audio_vario_step(float vario)
 	vario_ivario_old = ivario;
 	
 	if (audio_vario_mode == VARIO_BIBIP){
-	   if (ivario > 0.5)//lift
-	   {
-            bibip_freq1 = get_near(vario, black_keys_shift);
-            bibip_freq2 = get_near(vario, black_keys);	       
+        if (config.gui.vario_volume > 0){
+    	   if (ivario >= config.audio_profile.lift )//lift
+    	   {
+                bibip_freq1 = get_near(vario, black_keys);
+                bibip_freq2 = get_near(vario + 0.5, black_keys);	       
+    	   }
+    	   else if (ivario > config.audio_profile.sink)//buoyant
+    	   {
+                bibip_freq1 = get_near(vario, black_keys);
+                bibip_freq2 = get_near(vario, black_keys);	       
+    	   }
+    	   else //sink
+    	   {
+        	    bibip_freq1 = get_near(vario, black_keys);
+                bibip_freq2 = get_near(vario - 0.5, black_keys);
+    	   }
 	   }
-	   else if (ivario > -1.5)//buoyant
-	   {
-            bibip_freq1 = get_near(vario, black_keys);
-            bibip_freq2 = get_near(vario, black_keys);	       
-	   }
-	   else //sink
-	   {
-    	    bibip_freq1 = get_near(vario, black_keys);
-            bibip_freq2 = get_near(vario, black_keys_shift);
-	   }
-	   audio_vario_pause = get_near(vario, bibip_pauses);
-	   audio_vario_apply();
+	   audio_vario_pause = get_near(vario, bibip_pauses);//fixme use config
+       audio_vario_apply();
 	   return;
 	}
 
@@ -345,7 +270,7 @@ void audio_vario_step(float vario)
 
 		if (ivario >= buzz_thold && ivario < config.audio_profile.lift && ivario > config.audio_profile.sink)
 		{
-			int16_t freq;
+		  	int16_t freq;
 
 			//addition to base weak lift freq (can be negative)
 			int16_t beep_freq = get_near(config.audio_profile.lift / 100.0, config.audio_profile.freq);

@@ -47,10 +47,6 @@ void gui_value_draw_bar()
 	disp.DrawRectangle(GUI_DIALOG_LEFT + pad - 1, GUI_DIALOG_TOP + 11, GUI_DIALOG_LEFT + pad + pos - 1, GUI_DIALOG_TOP + 19, 1, 1);
 }
 
-extern volatile float audio_vario_freq;
-extern volatile uint16_t audio_vario_pause;
-extern volatile uint16_t audio_vario_length;
-
 void gui_value_loop()
 {
 	char tmp[20];
@@ -91,11 +87,11 @@ void gui_value_loop()
 			disp.LoadFont(F_TEXT_S);
 			f_h = disp.GetTextHeight();
 			disp.GotoXY(GUI_DIALOG_LEFT + 1, GUI_DIALOG_TOP + 2);
-			fprintf(lcd_out, "f=%0.0f", audio_vario_freq);
+			fprintf(lcd_out, "f1=%4dHz", bibip_freq1);
 			disp.GotoXY(GUI_DIALOG_LEFT + 1, GUI_DIALOG_TOP + 4 + f_h);
-			fprintf(lcd_out, "l=%4u", audio_vario_length / 31);
+			fprintf(lcd_out, "f2=%4dHz", bibip_freq2);
 			disp.GotoXY(GUI_DIALOG_LEFT + 1, GUI_DIALOG_TOP + 6 + f_h * 2);
-			fprintf(lcd_out, "p=%4u", audio_vario_pause / 31);
+			fprintf(lcd_out, "p=%4ums", audio_vario_pause);
 			disp.GotoXY(GUI_DIALOG_LEFT + 1, GUI_DIALOG_TOP + 8 + f_h * 3);
             fprintf(lcd_out, "BIBIP mode");
 
