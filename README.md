@@ -1,4 +1,5 @@
-Bibip sounds on the SkyDrop GPS Vario. Official SkyDrop repo is [here](https://github.com/fhorinek/SkyDrop/)  See (https://github.com/kubotron/BiBean)
+Bibip sounds on the SkyDrop GPS Vario. Official SkyDrop repo is [here](https://github.com/fhorinek/SkyDrop/) 
+See also the [Bibip on SkyBean vario](https://github.com/kubotron/BiBean)
 
 Installation
 ============
