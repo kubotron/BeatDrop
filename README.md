@@ -15,6 +15,7 @@ When you're flying a paraglider:
 * either you are climbing in rising air
 * or you are in sinking air, loosing height faster than usual
 * or you are somewhere in between, in air that is buoyant but not really climbing.
+
 Bibip has a distinct sound sequence in each case:
 
 * When climbing (above your configured climb threshold), it is rising: "boo-bip"
