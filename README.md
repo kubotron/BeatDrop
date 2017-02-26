@@ -12,14 +12,14 @@ Bibip is a pleasant and meaningful vario sound. Bibip makes two beeps, not just 
 
 When you're flying a paraglider:
 
-either you are climbing in rising air
-or you are in sinking air, loosing height faster than usual
-or you are somewhere in between, in air that is buoyant but not really climbing.
+* either you are climbing in rising air
+* or you are in sinking air, loosing height faster than usual
+* or you are somewhere in between, in air that is buoyant but not really climbing.
 Bibip has a distinct sound sequence in each case:
 
-When climbing (above your configured climb threshold), it is rising: "boo-bip"
-In sinking air (under the configured sink threshold), the melody is falling: "bip-boo"
-If buoyant (in between your lift and sink threshold), Bibip makes a flat "bip-bip"
+* When climbing (above your configured climb threshold), it is rising: "boo-bip"
+* In sinking air (under the configured sink threshold), the melody is falling: "bip-boo"
+* If buoyant (in between your lift and sink threshold), Bibip makes a flat "bip-bip"
 
 The character of the sound in climb is different from the sinking/buoyant sound. Bibip is never quiet. The sounds are based on black piano keys, they are not configurable yet.
 
